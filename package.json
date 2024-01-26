@@ -1,0 +1,29 @@
+{
+  "name": "meet-ton-notify",
+  "version": "1.13.3",
+  "dependencies": {
+    "@orbs-network/ton-access": "^2.3.3",
+    "@ton/core": "^0.53.0",
+    "@types/node": "^20.2.5",
+    "jest": "^29.5.0",
+    "prettier": "^3.1.0",
+    "ton": "^13.9.0",
+    "ton-core": "^0.53.0",
+    "ton-crypto": "^3.2.0",
+    "tonweb": "^0.0.62",
+    "tonweb-boc": "^0.0.4",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

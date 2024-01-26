@@ -1,0 +1,212 @@
+#pragma version =0.4.3;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "tact_MeetTon.headers.fc";
+#include "tact_MeetTon.stdlib.fc";
+#include "tact_MeetTon.storage.fc";
+
+;;
+;; Contract MeetTon functions
+;;
+
+(slice, cell) $MeetTon$_contract_init() impure inline_ref {
+    var (($self'owner, $self'payments)) = (null(), null());
+    $self'owner = __tact_context_get_sender();
+    return ($self'owner, $self'payments);
+}
+
+((slice, cell), ()) $MeetTon$_fun_onlyOwner((slice, cell) $self) impure inline_ref {
+    var (($self'owner, $self'payments)) = $self;
+    throw_unless(53979, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
+    return (($self'owner, $self'payments), ());
+}
+
+((slice, cell), int) $MeetTon$_fun_balance((slice, cell) $self) impure inline_ref {
+    var (($self'owner, $self'payments)) = $self;
+    return (($self'owner, $self'payments), __tact_my_balance());
+}
+
+((slice, cell), slice) $MeetTon$_fun_myAddress((slice, cell) $self) impure inline_ref {
+    var (($self'owner, $self'payments)) = $self;
+    return (($self'owner, $self'payments), my_address());
+}
+
+((slice, cell), tuple) $MeetTon$_fun_payment((slice, cell) $self, slice $key) impure inline_ref {
+    var (($self'owner, $self'payments)) = $self;
+    return (($self'owner, $self'payments), $Payment$_load_opt(__tact_dict_get_slice_cell($self'payments, 267, $key)));
+}
+
+((slice, cell), cell) $MeetTon$_fun_payments((slice, cell) $self) impure inline_ref {
+    var (($self'owner, $self'payments)) = $self;
+    return (($self'owner, $self'payments), $self'payments);
+}
+
+;;
+;; Receivers of a Contract MeetTon
+;;
+
+(((slice, cell)), ()) $MeetTon$_internal_binary_Income((slice, cell) $self, (slice) $inc) impure inline {
+    var ($self'owner, $self'payments) = $self;
+    var ($inc'goal) = $inc;
+    $self'payments~__tact_dict_set_slice_cell(267, __tact_context_get_sender(), $Payment$_store_cell($Payment$_constructor_goal_value($inc'goal, $Context$_get_value(__tact_context_get()))));
+    return (($self'owner, $self'payments), ());
+}
+
+((slice, cell), ()) $MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec((slice, cell) $self) impure inline {
+    var ($self'owner, $self'payments) = $self;
+    ($self'owner, $self'payments)~$MeetTon$_fun_onlyOwner();
+    $global_send($SendParameters$_constructor_to_bounce_value_mode(__tact_context_get_sender(), true, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 50000000), (2 + 64)));
+    return (($self'owner, $self'payments), ());
+}
+
+(((slice, cell)), ()) $MeetTon$_internal_binary_Withdraw((slice, cell) $self, (int) $msg) impure inline {
+    var ($self'owner, $self'payments) = $self;
+    var ($msg'amount) = $msg;
+    ($self'owner, $self'payments)~$MeetTon$_fun_onlyOwner();
+    int $amount = min($msg'amount, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 50000000));
+    throw_unless(54615, ($amount > 0));
+    $global_send($SendParameters$_constructor_to_bounce_value_mode(__tact_context_get_sender(), true, $amount, (2 + 64)));
+    return (($self'owner, $self'payments), ());
+}
+
+((slice, cell), ()) $MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea((slice, cell) $self) impure inline {
+    var ($self'owner, $self'payments) = $self;
+    ($self'owner, $self'payments)~$MeetTon$_fun_onlyOwner();
+    $self'payments = null();
+    return (($self'owner, $self'payments), ());
+}
+
+(((slice, cell)), ()) $MeetTon$_internal_binary_Deploy((slice, cell) $self, (int) $deploy) impure inline {
+    var ($self'owner, $self'payments) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'owner, $self'payments)~$MeetTon$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'owner, $self'payments), ());
+}
+
+;;
+;; Get methods of a Contract MeetTon
+;;
+
+_ %balance() method_id(104128) {
+    var self = $MeetTon$_contract_load();
+    var res = self~$MeetTon$_fun_balance();
+    return res;
+}
+
+_ %myAddress() method_id(77701) {
+    var self = $MeetTon$_contract_load();
+    var res = self~$MeetTon$_fun_myAddress();
+    return res;
+}
+
+_ %payment(slice $$key) method_id(77274) {
+    slice $key = __tact_verify_address($$key);
+    var self = $MeetTon$_contract_load();
+    var res = self~$MeetTon$_fun_payment($key);
+    return $Payment$_to_opt_external(res);
+}
+
+_ %payments() method_id(90427) {
+    var self = $MeetTon$_contract_load();
+    var res = self~$MeetTon$_fun_payments();
+    return res;
+}
+
+_ supported_interfaces() method_id {
+    return (
+        "org.ton.introspection.v0"H >> 128,
+        "org.ton.abi.ipfs.v0"H >> 128,
+        "org.ton.deploy.lazy.v0"H >> 128,
+        "org.ton.chain.workchain.v0"H >> 128
+    );
+}
+
+_ get_abi_ipfs() method_id {
+    return "ipfs://QmNkvmvZtpRWTrZn5wcbcnj1Kx43axtDjvcdDuApVzdBgK";
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract MeetTon
+;;
+
+((slice, cell), int) $MeetTon$_contract_router_internal((slice, cell) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive Income message
+    if (op == 631667091) {
+        var msg = in_msg~$Income$_load();
+        self~$MeetTon$_internal_binary_Income(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Withdraw message
+    if (op == 195467089) {
+        var msg = in_msg~$Withdraw$_load();
+        self~$MeetTon$_internal_binary_Withdraw(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$MeetTon$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    ;; Text Receivers
+    if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "withdraw safe" message
+        if (text_op == 0xbeb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec) {
+            self~$MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec();
+            return (self, true);
+        }
+        
+        ;; Receive "clear" message
+        if (text_op == 0x0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea) {
+            self~$MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea();
+            return (self, true);
+        }
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $MeetTon$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$MeetTon$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $MeetTon$_contract_store(self);
+}

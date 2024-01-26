@@ -1,0 +1,192 @@
+;;
+;; Type: StateInit
+;; TLB: _ code:^cell data:^cell = StateInit
+;;
+
+((cell, cell)) $StateInit$_not_null(tuple v) inline {
+    throw_if(128, null?(v));
+    var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
+    return (vvv'code, vvv'data);
+}
+
+;;
+;; Type: Context
+;; TLB: _ bounced:bool sender:address value:int257 raw:^slice = Context
+;;
+
+_ $Context$_get_value((int, slice, int, slice) v) inline {
+    var (v'bounced, v'sender, v'value, v'raw) = v;
+    return v'value;
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
+;;
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline {
+    return (bounce, to, value, mode, body, code, data);
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_bounce_value_mode(slice to, int bounce, int value, int mode) inline {
+    return (bounce, to, value, mode, null(), null(), null());
+}
+
+;;
+;; Type: Deploy
+;; Header: 0x946a98b6
+;; TLB: deploy#946a98b6 queryId:uint64 = Deploy
+;;
+
+(slice, ((int))) $Deploy$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v) inline {
+    return $DeployOk$_store(begin_cell(), v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int queryId) inline {
+    return (queryId);
+}
+
+;;
+;; Type: Withdraw
+;; Header: 0x0ba69751
+;; TLB: withdraw#0ba69751 amount:coins = Withdraw
+;;
+
+(slice, ((int))) $Withdraw$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 195467089);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
+}
+
+;;
+;; Type: Income
+;; Header: 0x25a67993
+;; TLB: income#25a67993 goal:^string = Income
+;;
+
+(slice, ((slice))) $Income$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 631667091);
+    var v'goal = sc_0~load_ref().begin_parse();
+    return (sc_0, (v'goal));
+}
+
+;;
+;; Type: Payment
+;; TLB: _ goal:^string value:int257 = Payment
+;;
+
+builder $Payment$_store(builder build_0, (slice, int) v) inline {
+    var (v'goal, v'value) = v;
+    build_0 = build_0.store_ref(begin_cell().store_slice(v'goal).end_cell());
+    build_0 = build_0.store_int(v'value, 257);
+    return build_0;
+}
+
+cell $Payment$_store_cell((slice, int) v) inline {
+    return $Payment$_store(begin_cell(), v).end_cell();
+}
+
+(slice, ((slice, int))) $Payment$_load(slice sc_0) inline {
+    var v'goal = sc_0~load_ref().begin_parse();
+    var v'value = sc_0~load_int(257);
+    return (sc_0, (v'goal, v'value));
+}
+
+tuple $Payment$_as_optional((slice, int) v) inline {
+    var (v'goal, v'value) = v;
+    return __tact_tuple_create_2(v'goal, v'value);
+}
+
+tuple $Payment$_load_opt(cell cl) inline {
+    if (null?(cl)) {
+        return null();
+    }
+    var sc = cl.begin_parse();
+    return $Payment$_as_optional(sc~$Payment$_load());
+}
+
+((slice, int)) $Payment$_not_null(tuple v) inline {
+    throw_if(128, null?(v));
+    var (slice vvv'goal, int vvv'value) = __tact_tuple_destroy_2(v);
+    return (vvv'goal, vvv'value);
+}
+
+tuple $Payment$_to_tuple(((slice, int)) v) inline {
+    var (v'goal, v'value) = v;
+    return __tact_tuple_create_2(v'goal, v'value);
+}
+
+tuple $Payment$_to_opt_tuple(tuple v) inline {
+    if (null?(v)) { return null(); } 
+    return $Payment$_to_tuple($Payment$_not_null(v)); 
+}
+
+tuple $Payment$_to_opt_external(tuple v) inline {
+    var loaded = $Payment$_to_opt_tuple(v);
+    if (null?(loaded)) {
+        return null();
+    } else {
+        return (loaded);
+    }
+}
+
+((slice, int)) $Payment$_constructor_goal_value(slice goal, int value) inline {
+    return (goal, value);
+}
+
+;;
+;; Type: MeetTon
+;;
+
+builder $MeetTon$_store(builder build_0, (slice, cell) v) inline {
+    var (v'owner, v'payments) = v;
+    build_0 = __tact_store_address(build_0, v'owner);
+    build_0 = build_0.store_dict(v'payments);
+    return build_0;
+}
+
+(slice, ((slice, cell))) $MeetTon$_load(slice sc_0) inline {
+    var v'owner = sc_0~__tact_load_address();
+    var v'payments = sc_0~load_dict();
+    return (sc_0, (v'owner, v'payments));
+}
+
+(slice, cell) $MeetTon$_contract_load() impure inline_ref {
+    slice $sc = get_data().begin_parse();
+    __tact_context_sys = $sc~load_ref();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$MeetTon$_load();
+    } else {
+        ;; Allow only workchain deployments
+        throw_unless(137, my_address().preload_uint(11) == 1024);
+        return $MeetTon$_contract_init();
+    }
+}
+
+() $MeetTon$_contract_store((slice, cell) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_ref(__tact_context_sys);
+    b = b.store_int(true, 1);
+    b = $MeetTon$_store(b, v);
+    set_data(b.end_cell());
+}
