@@ -1,7 +1,7 @@
 import {TonClient, fromNano} from "ton";
 import { Address } from "ton-core";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
-import {MeetTon} from "../contract/MeetTon/tact_MeetTon";
+import {MeetTon} from "./contract/MeetTon/tact_MeetTon.js";
 
 (async () => {
     try {

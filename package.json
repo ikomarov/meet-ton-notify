@@ -21,7 +21,6 @@
     "start": "tsc && node dist/index.js"
   },
   "main": "index.js",
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
