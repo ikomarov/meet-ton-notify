@@ -10,78 +10,88 @@
 ;; Contract MeetTon functions
 ;;
 
-(slice, cell) $MeetTon$_contract_init() impure inline_ref {
-    var (($self'owner, $self'payments)) = (null(), null());
+(slice, cell, int) $MeetTon$_contract_init() impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = (null(), null(), 0);
     $self'owner = __tact_context_get_sender();
-    return ($self'owner, $self'payments);
+    return ($self'owner, $self'payments, $self'arrLength);
 }
 
-((slice, cell), ()) $MeetTon$_fun_onlyOwner((slice, cell) $self) impure inline_ref {
-    var (($self'owner, $self'payments)) = $self;
+((slice, cell, int), ()) $MeetTon$_fun_onlyOwner((slice, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = $self;
     throw_unless(53979, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
-    return (($self'owner, $self'payments), ());
+    return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
-((slice, cell), int) $MeetTon$_fun_balance((slice, cell) $self) impure inline_ref {
-    var (($self'owner, $self'payments)) = $self;
-    return (($self'owner, $self'payments), __tact_my_balance());
+((slice, cell, int), int) $MeetTon$_fun_balance((slice, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = $self;
+    return (($self'owner, $self'payments, $self'arrLength), __tact_my_balance());
 }
 
-((slice, cell), slice) $MeetTon$_fun_myAddress((slice, cell) $self) impure inline_ref {
-    var (($self'owner, $self'payments)) = $self;
-    return (($self'owner, $self'payments), my_address());
+((slice, cell, int), slice) $MeetTon$_fun_myAddress((slice, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = $self;
+    return (($self'owner, $self'payments, $self'arrLength), my_address());
 }
 
-((slice, cell), tuple) $MeetTon$_fun_payment((slice, cell) $self, slice $key) impure inline_ref {
-    var (($self'owner, $self'payments)) = $self;
-    return (($self'owner, $self'payments), $Payment$_load_opt(__tact_dict_get_slice_cell($self'payments, 267, $key)));
+((slice, cell, int), tuple) $MeetTon$_fun_payment((slice, cell, int) $self, int $key) impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = $self;
+    return (($self'owner, $self'payments, $self'arrLength), $Payment$_load_opt(__tact_dict_get_int_cell($self'payments, 257, $key)));
 }
 
-((slice, cell), cell) $MeetTon$_fun_payments((slice, cell) $self) impure inline_ref {
-    var (($self'owner, $self'payments)) = $self;
-    return (($self'owner, $self'payments), $self'payments);
+((slice, cell, int), cell) $MeetTon$_fun_payments((slice, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = $self;
+    return (($self'owner, $self'payments, $self'arrLength), $self'payments);
+}
+
+((slice, cell, int), int) $MeetTon$_fun_length((slice, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'payments, $self'arrLength)) = $self;
+    return (($self'owner, $self'payments, $self'arrLength), $self'arrLength);
 }
 
 ;;
 ;; Receivers of a Contract MeetTon
 ;;
 
-(((slice, cell)), ()) $MeetTon$_internal_binary_Income((slice, cell) $self, (slice) $inc) impure inline {
-    var ($self'owner, $self'payments) = $self;
+(((slice, cell, int)), ()) $MeetTon$_internal_binary_Income((slice, cell, int) $self, (slice) $inc) impure inline {
+    var ($self'owner, $self'payments, $self'arrLength) = $self;
     var ($inc'goal) = $inc;
-    $self'payments~__tact_dict_set_slice_cell(267, __tact_context_get_sender(), $Payment$_store_cell($Payment$_constructor_goal_value($inc'goal, $Context$_get_value(__tact_context_get()))));
-    return (($self'owner, $self'payments), ());
+    var ($item'sender, $item'goal, $item'value, $item'date) = $Payment$_constructor_goal_value_sender_date($inc'goal, $Context$_get_value(__tact_context_get()), __tact_context_get_sender(), now());
+    $self'payments~__tact_dict_set_int_cell(257, $self'arrLength, $Payment$_store_cell(($item'sender, $item'goal, $item'value, $item'date)));
+    $self'arrLength = ($self'arrLength + 1);
+    return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
-((slice, cell), ()) $MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec((slice, cell) $self) impure inline {
-    var ($self'owner, $self'payments) = $self;
-    ($self'owner, $self'payments)~$MeetTon$_fun_onlyOwner();
-    $global_send($SendParameters$_constructor_to_bounce_value_mode(__tact_context_get_sender(), true, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 50000000), (2 + 64)));
-    return (($self'owner, $self'payments), ());
+((slice, cell, int), ()) $MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec((slice, cell, int) $self) impure inline {
+    var ($self'owner, $self'payments, $self'arrLength) = $self;
+    ($self'owner, $self'payments, $self'arrLength)~$MeetTon$_fun_onlyOwner();
+    $global_send($SendParameters$_constructor_to_bounce_value_mode(__tact_context_get_sender(), true, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 10000000), (2 + 64)));
+    return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
-(((slice, cell)), ()) $MeetTon$_internal_binary_Withdraw((slice, cell) $self, (int) $msg) impure inline {
-    var ($self'owner, $self'payments) = $self;
+(((slice, cell, int)), ()) $MeetTon$_internal_binary_Withdraw((slice, cell, int) $self, (int) $msg) impure inline {
+    var ($self'owner, $self'payments, $self'arrLength) = $self;
     var ($msg'amount) = $msg;
-    ($self'owner, $self'payments)~$MeetTon$_fun_onlyOwner();
-    int $amount = min($msg'amount, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 50000000));
+    ($self'owner, $self'payments, $self'arrLength)~$MeetTon$_fun_onlyOwner();
+    int $amount = min($msg'amount, ((__tact_my_balance() - $Context$_get_value(__tact_context_get())) - 10000000));
     throw_unless(54615, ($amount > 0));
     $global_send($SendParameters$_constructor_to_bounce_value_mode(__tact_context_get_sender(), true, $amount, (2 + 64)));
-    return (($self'owner, $self'payments), ());
+    return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
-((slice, cell), ()) $MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea((slice, cell) $self) impure inline {
-    var ($self'owner, $self'payments) = $self;
-    ($self'owner, $self'payments)~$MeetTon$_fun_onlyOwner();
+(((slice, cell, int)), ()) $MeetTon$_internal_binary_Clear((slice, cell, int) $self, (int) $msg) impure inline {
+    var ($self'owner, $self'payments, $self'arrLength) = $self;
+    var ($msg'itemNumb) = $msg;
+    ($self'owner, $self'payments, $self'arrLength)~$MeetTon$_fun_onlyOwner();
+    throw_unless(27997, ($self'arrLength == $msg'itemNumb));
     $self'payments = null();
-    return (($self'owner, $self'payments), ());
+    $self'arrLength = 0;
+    return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
-(((slice, cell)), ()) $MeetTon$_internal_binary_Deploy((slice, cell) $self, (int) $deploy) impure inline {
-    var ($self'owner, $self'payments) = $self;
+(((slice, cell, int)), ()) $MeetTon$_internal_binary_Deploy((slice, cell, int) $self, (int) $deploy) impure inline {
+    var ($self'owner, $self'payments, $self'arrLength) = $self;
     var ($deploy'queryId) = $deploy;
-    ($self'owner, $self'payments)~$MeetTon$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
-    return (($self'owner, $self'payments), ());
+    ($self'owner, $self'payments, $self'arrLength)~$MeetTon$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
 ;;
@@ -100,8 +110,8 @@ _ %myAddress() method_id(77701) {
     return res;
 }
 
-_ %payment(slice $$key) method_id(77274) {
-    slice $key = __tact_verify_address($$key);
+_ %payment(int $$key) method_id(77274) {
+    int $key = $$key;
     var self = $MeetTon$_contract_load();
     var res = self~$MeetTon$_fun_payment($key);
     return $Payment$_to_opt_external(res);
@@ -110,6 +120,12 @@ _ %payment(slice $$key) method_id(77274) {
 _ %payments() method_id(90427) {
     var self = $MeetTon$_contract_load();
     var res = self~$MeetTon$_fun_payments();
+    return res;
+}
+
+_ %length() method_id(107056) {
+    var self = $MeetTon$_contract_load();
+    var res = self~$MeetTon$_fun_length();
     return res;
 }
 
@@ -123,7 +139,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmNkvmvZtpRWTrZn5wcbcnj1Kx43axtDjvcdDuApVzdBgK";
+    return "ipfs://QmWQzBJba9xNt5u9ZdV2U8Bba3CuWqpoZ1jrSVx7S22pN8";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -134,7 +150,7 @@ _ lazy_deployment_completed() method_id {
 ;; Routing of a Contract MeetTon
 ;;
 
-((slice, cell), int) $MeetTon$_contract_router_internal((slice, cell) self, int msg_bounced, slice in_msg) impure inline_ref {
+((slice, cell, int), int) $MeetTon$_contract_router_internal((slice, cell, int) self, int msg_bounced, slice in_msg) impure inline_ref {
     ;; Handle bounced messages
     if (msg_bounced) {
         return (self, true);
@@ -161,6 +177,13 @@ _ lazy_deployment_completed() method_id {
         return (self, true);
     }
     
+    ;; Receive Clear message
+    if (op == 1708884888) {
+        var msg = in_msg~$Clear$_load();
+        self~$MeetTon$_internal_binary_Clear(msg);
+        return (self, true);
+    }
+    
     ;; Receive Deploy message
     if (op == 2490013878) {
         var msg = in_msg~$Deploy$_load();
@@ -175,12 +198,6 @@ _ lazy_deployment_completed() method_id {
         ;; Receive "withdraw safe" message
         if (text_op == 0xbeb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec) {
             self~$MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec();
-            return (self, true);
-        }
-        
-        ;; Receive "clear" message
-        if (text_op == 0x0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea) {
-            self~$MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea();
             return (self, true);
         }
     }

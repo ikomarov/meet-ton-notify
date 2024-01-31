@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: MeetTon
-BOC Size: 1140 bytes
+BOC Size: 1220 bytes
 
 # Types
-Total Types: 9
+Total Types: 10
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -38,11 +38,15 @@ TLB: `income#25a67993 goal:^string = Income`
 Signature: `Income{goal:^string}`
 
 ## Payment
-TLB: `_ goal:^string value:int257 = Payment`
-Signature: `Payment{goal:^string,value:int257}`
+TLB: `_ sender:address goal:^string value:coins date:uint32 = Payment`
+Signature: `Payment{sender:address,goal:^string,value:coins,date:uint32}`
+
+## Clear
+TLB: `clear#65db8398 itemNumb:uint16 = Clear`
+Signature: `Clear{itemNumb:uint16}`
 
 # Get Methods
-Total Get Methods: 4
+Total Get Methods: 5
 
 ## balance
 
@@ -52,6 +56,8 @@ Total Get Methods: 4
 Argument: key
 
 ## payments
+
+## length
 
 # Error Codes
 2: Stack undeflow
@@ -78,5 +84,6 @@ Argument: key
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
+27997: You have more unresolved transactions
 53979: only owner is allowed to withdraw
 54615: Insufficient balance

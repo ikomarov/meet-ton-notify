@@ -7,8 +7,8 @@ PROGRAM{
   DECLPROC __tact_context_get
   DECLPROC __tact_context_get_sender
   DECLPROC __tact_store_bool
-  DECLPROC __tact_dict_set_slice_cell
-  DECLPROC __tact_dict_get_slice_cell
+  DECLPROC __tact_dict_set_int_cell
+  DECLPROC __tact_dict_get_int_cell
   DECLPROC __tact_slice_eq_bits
   DECLPROC $Deploy$_load
   DECLPROC $DeployOk$_store
@@ -20,6 +20,7 @@ PROGRAM{
   DECLPROC $Payment$_load
   DECLPROC $Payment$_as_optional
   DECLPROC $Payment$_load_opt
+  DECLPROC $Clear$_load
   DECLPROC $MeetTon$_store
   DECLPROC $MeetTon$_load
   DECLPROC $StateInit$_not_null
@@ -37,21 +38,23 @@ PROGRAM{
   DECLPROC $MeetTon$_fun_myAddress
   DECLPROC $MeetTon$_fun_payment
   DECLPROC $MeetTon$_fun_payments
+  DECLPROC $MeetTon$_fun_length
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $MeetTon$_fun_forward
   DECLPROC $MeetTon$_fun_notify
-  DECLPROC $Payment$_constructor_goal_value
+  DECLPROC $Payment$_constructor_goal_value_sender_date
   DECLPROC $SendParameters$_constructor_to_bounce_value_mode
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $MeetTon$_internal_binary_Income
   DECLPROC $MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec
   DECLPROC $MeetTon$_internal_binary_Withdraw
-  DECLPROC $MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea
+  DECLPROC $MeetTon$_internal_binary_Clear
   DECLPROC $MeetTon$_internal_binary_Deploy
   104128 DECLMETHOD %balance
   77701 DECLMETHOD %myAddress
   77274 DECLMETHOD %payment
   90427 DECLMETHOD %payments
+  107056 DECLMETHOD %length
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
@@ -106,22 +109,22 @@ PROGRAM{
     SWAP
     1 STI
   }>
-  __tact_dict_set_slice_cell PROCINLINE:<{
+  __tact_dict_set_int_cell PROCINLINE:<{
     DUP
     ISNULL
     IF:<{
       DROP
       -ROT
-      DICTDEL
+      DICTIDEL
       DROP
     }>ELSE<{
       s1 s3 s3 XCHG3
-      DICTSETREF
+      DICTISETREF
     }>
   }>
-  __tact_dict_get_slice_cell PROCINLINE:<{
+  __tact_dict_get_int_cell PROCINLINE:<{
     -ROT
-    DICTGETREF
+    DICTIGETREF
     NULLSWAPIFNOT
     IF:<{
     }>ELSE<{
@@ -173,32 +176,37 @@ PROGRAM{
     CTOS
   }>
   $Payment$_store PROCINLINE:<{
+    s4 s3 XCHG2
+    __tact_store_address INLINECALLDICT
     NEWC
     ROT
     STSLICER
     ENDC
-    ROT
+    SWAP
     STREF
-    257 PUSHINT
-    STIX
+    ROT
+    STGRAMS
+    32 STU
   }>
   $Payment$_store_cell PROCINLINE:<{
     NEWC
-    -ROT
+    4 -ROLL
     $Payment$_store INLINECALLDICT
     ENDC
   }>
   $Payment$_load PROCINLINE:<{
+    __tact_load_address INLINECALLDICT
+    SWAP
     LDREF
     SWAP
     CTOS
     SWAP
-    257 PUSHINT
-    LDIX
-    -ROT
+    LDGRAMS
+    32 LDU
+    4 -ROLL
   }>
   $Payment$_as_optional PROCINLINE:<{
-    2 TUPLE
+    4 TUPLE
   }>
   $Payment$_load_opt PROCINLINE:<{
     DUP
@@ -209,20 +217,32 @@ PROGRAM{
     }>ELSE<{
       CTOS
       $Payment$_load INLINECALLDICT
-      1 2 BLKDROP2
+      1 4 BLKDROP2
       $Payment$_as_optional INLINECALLDICT
     }>
   }>
+  $Clear$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1708884888 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    16 LDU
+    SWAP
+  }>
   $MeetTon$_store PROCINLINE:<{
-    -ROT
+    2SWAP
     __tact_store_address INLINECALLDICT
+    s1 s2 XCHG
     STDICT
+    16 STU
   }>
   $MeetTon$_load PROCINLINE:<{
     __tact_load_address INLINECALLDICT
     SWAP
     LDDICT
-    -ROT
+    16 LDU
+    3 -ROLL
   }>
   $StateInit$_not_null PROCINLINE:<{
     DUP
@@ -238,10 +258,10 @@ PROGRAM{
     DUP
     ISNULL
     128 THROWIF
-    2 UNTUPLE
+    4 UNTUPLE
   }>
   $Payment$_to_tuple PROCINLINE:<{
-    2 TUPLE
+    4 TUPLE
   }>
   $Payment$_to_opt_tuple PROCINLINE:<{
     DUP
@@ -266,8 +286,9 @@ PROGRAM{
   }>
   $MeetTon$_contract_init PROCREF:<{
     PUSHNULL
+    0 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    SWAP
+    -ROT
   }>
   $MeetTon$_contract_load PROCREF:<{
     c4 PUSH
@@ -279,7 +300,7 @@ PROGRAM{
     SWAP
     IFJMP:<{
       $MeetTon$_load INLINECALLDICT
-      1 2 BLKDROP2
+      1 3 BLKDROP2
     }>
     DROP
     MYADDR
@@ -297,7 +318,7 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    -ROT
+    3 -ROLL
     $MeetTon$_store INLINECALLDICT
     ENDC
     c4 POP
@@ -407,7 +428,7 @@ PROGRAM{
   $MeetTon$_fun_onlyOwner PROCREF:<{
     53979 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s3 s(-1) PUXC
+    s4 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
     THROWANYIFNOT
   }>
@@ -418,13 +439,16 @@ PROGRAM{
     MYADDR
   }>
   $MeetTon$_fun_payment PROCREF:<{
-    267 PUSHINT
-    s2 PUSH
+    257 PUSHINT
+    s3 PUSH
     s0 s2 XCHG
-    __tact_dict_get_slice_cell INLINECALLDICT
+    __tact_dict_get_int_cell INLINECALLDICT
     $Payment$_load_opt INLINECALLDICT
   }>
   $MeetTon$_fun_payments PROCREF:<{
+    OVER
+  }>
+  $MeetTon$_fun_length PROCREF:<{
     DUP
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
@@ -458,7 +482,8 @@ PROGRAM{
     PUSHNULL
     $MeetTon$_fun_forward INLINECALLDICT
   }>
-  $Payment$_constructor_goal_value PROCINLINE:<{
+  $Payment$_constructor_goal_value_sender_date PROCINLINE:<{
+    s3 s3 s0 XCHG3
   }>
   $SendParameters$_constructor_to_bounce_value_mode PROCINLINE:<{
     s2 s3 XCHG
@@ -469,15 +494,21 @@ PROGRAM{
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
   $MeetTon$_internal_binary_Income PROCINLINE:<{
-    267 PUSHINT
-    __tact_context_get_sender INLINECALLDICT
     __tact_context_get INLINECALLDICT
     $Context$_get_value INLINECALLDICT
-    s1 s3 XCHG
-    $Payment$_constructor_goal_value INLINECALLDICT
+    __tact_context_get_sender INLINECALLDICT
+    NOW
+    $Payment$_constructor_goal_value_sender_date INLINECALLDICT
+    3 -ROLL
+    257 PUSHINT
+    s0 s4 XCHG
     $Payment$_store_cell INLINECALLDICT
-    s1 s2 XCHG
-    __tact_dict_set_slice_cell INLINECALLDICT
+    s2 PUSH
+    s3 s4 XCHG
+    SWAP
+    __tact_dict_set_int_cell INLINECALLDICT
+    SWAP
+    INC
   }>
   $MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec PROCINLINE:<{
     $MeetTon$_fun_onlyOwner INLINECALLDICT
@@ -487,22 +518,22 @@ PROGRAM{
     __tact_context_get INLINECALLDICT
     $Context$_get_value INLINECALLDICT
     SUB
-    50000000 PUSHINT
+    10000000 PUSHINT
     SUB
     66 PUSHINT
     $SendParameters$_constructor_to_bounce_value_mode INLINECALLDICT
     $global_send INLINECALLDICT
   }>
   $MeetTon$_internal_binary_Withdraw PROCINLINE:<{
-    -ROT
+    3 -ROLL
     $MeetTon$_fun_onlyOwner INLINECALLDICT
     __tact_my_balance INLINECALLDICT
     __tact_context_get INLINECALLDICT
     $Context$_get_value INLINECALLDICT
     SUB
-    50000000 PUSHINT
+    10000000 PUSHINT
     SUB
-    s1 s3 XCHG
+    s1 s4 XCHG
     MIN
     54615 PUSHINT
     OVER
@@ -514,12 +545,19 @@ PROGRAM{
     66 PUSHINT
     $SendParameters$_constructor_to_bounce_value_mode INLINECALLDICT
     $global_send INLINECALLDICT
-    SWAP
+    ROT
   }>
-  $MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea PROCINLINE:<{
+  $MeetTon$_internal_binary_Clear PROCINLINE:<{
+    3 -ROLL
     $MeetTon$_fun_onlyOwner INLINECALLDICT
-    DROP
+    NIP
+    27997 PUSHINT
+    s0 s3 XCHG
+    EQUAL
+    s1 s2 XCHG
+    THROWANYIFNOT
     PUSHNULL
+    0 PUSHINT
   }>
   $MeetTon$_internal_binary_Deploy PROCINLINE:<{
     $DeployOk$_constructor_queryId INLINECALLDICT
@@ -529,25 +567,29 @@ PROGRAM{
   %balance PROC:<{
     $MeetTon$_contract_load INLINECALLDICT
     $MeetTon$_fun_balance INLINECALLDICT
-    2 1 BLKDROP2
+    3 1 BLKDROP2
   }>
   %myAddress PROC:<{
     $MeetTon$_contract_load INLINECALLDICT
     $MeetTon$_fun_myAddress INLINECALLDICT
-    2 1 BLKDROP2
+    3 1 BLKDROP2
   }>
   %payment PROC:<{
-    __tact_verify_address INLINECALLDICT
     $MeetTon$_contract_load INLINECALLDICT
-    ROT
+    3 ROLL
     $MeetTon$_fun_payment INLINECALLDICT
-    2 1 BLKDROP2
+    3 1 BLKDROP2
     $Payment$_to_opt_external INLINECALLDICT
   }>
   %payments PROC:<{
     $MeetTon$_contract_load INLINECALLDICT
     $MeetTon$_fun_payments INLINECALLDICT
-    2 1 BLKDROP2
+    3 1 BLKDROP2
+  }>
+  %length PROC:<{
+    $MeetTon$_contract_load INLINECALLDICT
+    $MeetTon$_fun_length INLINECALLDICT
+    3 1 BLKDROP2
   }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
@@ -556,7 +598,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d4e6b766d765a7470525754725a6e35776362636e6a314b783433617874446a76636444754170567a6442674b} PUSHSLICE
+    x{697066733a2f2f516d57517a424a626139784e743575395a64563255384262613343755771706f5a316a7253567837533232704e38} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -602,6 +644,16 @@ PROGRAM{
       TRUE
     }>
     DUP
+    1708884888 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $Clear$_load INLINECALLDICT
+      NIP
+      $MeetTon$_internal_binary_Clear INLINECALLDICT
+      TRUE
+    }>
+    DUP
     2490013878 PUSHINT
     EQUAL
     IFJMP:<{
@@ -614,19 +666,10 @@ PROGRAM{
     0 EQINT
     IF:<{
       HASHSU
-      DUP
       86254957005153482593167742035089344693437782575091241529406133056369733950700 PUSHINT
       EQUAL
       IFJMP:<{
-        DROP
         $MeetTon$_internal_text_beb2935a82089b154d32f99c4377aa960aa115366cc2c602755e36b97f505cec INLINECALLDICT
-        TRUE
-        RETALT
-      }>
-      5478712514858160429952559455580538452086151038933333316181387135928500659434 PUSHINT
-      EQUAL
-      IFJMP:<{
-        $MeetTon$_internal_text_0c1cd7659460b0f81b94237cd5ffc13a4fb58ea689b2815de74dd3770646a4ea INLINECALLDICT
         TRUE
         RETALT
       }>
@@ -654,7 +697,7 @@ PROGRAM{
     s0 s2 XCHG
     __tact_context_sender SETGLOB
     $MeetTon$_contract_load INLINECALLDICT
-    2SWAP
+    2 3 BLKSWAP
     $MeetTon$_contract_router_internal INLINECALLDICT
     130 THROWIFNOT
     $MeetTon$_contract_store INLINECALLDICT

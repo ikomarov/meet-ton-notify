@@ -27,11 +27,11 @@ slice __tact_context_get_sender() inline;
 ;; __tact_store_bool
 builder __tact_store_bool(builder b, int v) inline;
 
-;; __tact_dict_set_slice_cell
-(cell, ()) __tact_dict_set_slice_cell(cell d, int kl, slice k, cell v) inline;
+;; __tact_dict_set_int_cell
+(cell, ()) __tact_dict_set_int_cell(cell d, int kl, int k, cell v) inline;
 
-;; __tact_dict_get_slice_cell
-cell __tact_dict_get_slice_cell(cell d, int kl, slice k) inline;
+;; __tact_dict_get_int_cell
+cell __tact_dict_get_int_cell(cell d, int kl, int k) inline;
 
 ;; __tact_slice_eq_bits
 int __tact_slice_eq_bits(slice a, slice b) inline;
@@ -52,25 +52,28 @@ cell $DeployOk$_store_cell((int) v) inline;
 (slice, ((slice))) $Income$_load(slice sc_0) inline;
 
 ;; $Payment$_store
-builder $Payment$_store(builder build_0, (slice, int) v) inline;
+builder $Payment$_store(builder build_0, (slice, slice, int, int) v) inline;
 
 ;; $Payment$_store_cell
-cell $Payment$_store_cell((slice, int) v) inline;
+cell $Payment$_store_cell((slice, slice, int, int) v) inline;
 
 ;; $Payment$_load
-(slice, ((slice, int))) $Payment$_load(slice sc_0) inline;
+(slice, ((slice, slice, int, int))) $Payment$_load(slice sc_0) inline;
 
 ;; $Payment$_as_optional
-tuple $Payment$_as_optional((slice, int) v) inline;
+tuple $Payment$_as_optional((slice, slice, int, int) v) inline;
 
 ;; $Payment$_load_opt
 tuple $Payment$_load_opt(cell cl) inline;
 
+;; $Clear$_load
+(slice, ((int))) $Clear$_load(slice sc_0) inline;
+
 ;; $MeetTon$_store
-builder $MeetTon$_store(builder build_0, (slice, cell) v) inline;
+builder $MeetTon$_store(builder build_0, (slice, cell, int) v) inline;
 
 ;; $MeetTon$_load
-(slice, ((slice, cell))) $MeetTon$_load(slice sc_0) inline;
+(slice, ((slice, cell, int))) $MeetTon$_load(slice sc_0) inline;
 
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
@@ -79,10 +82,10 @@ builder $MeetTon$_store(builder build_0, (slice, cell) v) inline;
 _ $Context$_get_value((int, slice, int, slice) v) inline;
 
 ;; $Payment$_not_null
-((slice, int)) $Payment$_not_null(tuple v) inline;
+((slice, slice, int, int)) $Payment$_not_null(tuple v) inline;
 
 ;; $Payment$_to_tuple
-tuple $Payment$_to_tuple(((slice, int)) v) inline;
+tuple $Payment$_to_tuple(((slice, slice, int, int)) v) inline;
 
 ;; $Payment$_to_opt_tuple
 tuple $Payment$_to_opt_tuple(tuple v) inline;
@@ -91,43 +94,46 @@ tuple $Payment$_to_opt_tuple(tuple v) inline;
 tuple $Payment$_to_opt_external(tuple v) inline;
 
 ;; $MeetTon$_contract_init
-(slice, cell) $MeetTon$_contract_init() impure inline_ref;
+(slice, cell, int) $MeetTon$_contract_init() impure inline_ref;
 
 ;; $MeetTon$_contract_load
-(slice, cell) $MeetTon$_contract_load() impure inline_ref;
+(slice, cell, int) $MeetTon$_contract_load() impure inline_ref;
 
 ;; $MeetTon$_contract_store
-() $MeetTon$_contract_store((slice, cell) v) impure inline;
+() $MeetTon$_contract_store((slice, cell, int) v) impure inline;
 
 ;; $global_send
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref;
 
 ;; $MeetTon$_fun_onlyOwner
-((slice, cell), ()) $MeetTon$_fun_onlyOwner((slice, cell) $self) impure inline_ref;
+((slice, cell, int), ()) $MeetTon$_fun_onlyOwner((slice, cell, int) $self) impure inline_ref;
 
 ;; $MeetTon$_fun_balance
-((slice, cell), int) $MeetTon$_fun_balance((slice, cell) $self) impure inline_ref;
+((slice, cell, int), int) $MeetTon$_fun_balance((slice, cell, int) $self) impure inline_ref;
 
 ;; $MeetTon$_fun_myAddress
-((slice, cell), slice) $MeetTon$_fun_myAddress((slice, cell) $self) impure inline_ref;
+((slice, cell, int), slice) $MeetTon$_fun_myAddress((slice, cell, int) $self) impure inline_ref;
 
 ;; $MeetTon$_fun_payment
-((slice, cell), tuple) $MeetTon$_fun_payment((slice, cell) $self, slice $key) impure inline_ref;
+((slice, cell, int), tuple) $MeetTon$_fun_payment((slice, cell, int) $self, int $key) impure inline_ref;
 
 ;; $MeetTon$_fun_payments
-((slice, cell), cell) $MeetTon$_fun_payments((slice, cell) $self) impure inline_ref;
+((slice, cell, int), cell) $MeetTon$_fun_payments((slice, cell, int) $self) impure inline_ref;
+
+;; $MeetTon$_fun_length
+((slice, cell, int), int) $MeetTon$_fun_length((slice, cell, int) $self) impure inline_ref;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
 ;; $MeetTon$_fun_forward
-((slice, cell), ()) $MeetTon$_fun_forward((slice, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
+((slice, cell, int), ()) $MeetTon$_fun_forward((slice, cell, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
 
 ;; $MeetTon$_fun_notify
-((slice, cell), ()) $MeetTon$_fun_notify((slice, cell) $self, cell $body) impure inline;
+((slice, cell, int), ()) $MeetTon$_fun_notify((slice, cell, int) $self, cell $body) impure inline;
 
-;; $Payment$_constructor_goal_value
-((slice, int)) $Payment$_constructor_goal_value(slice goal, int value) inline;
+;; $Payment$_constructor_goal_value_sender_date
+((slice, slice, int, int)) $Payment$_constructor_goal_value_sender_date(slice goal, int value, slice sender, int date) inline;
 
 ;; $SendParameters$_constructor_to_bounce_value_mode
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_bounce_value_mode(slice to, int bounce, int value, int mode) inline;
