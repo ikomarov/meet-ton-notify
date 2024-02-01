@@ -40,4 +40,4 @@ async function checkPayments() {
 
 }
 
-await recurringFunction(checkPayments)
+recurringFunction(checkPayments)

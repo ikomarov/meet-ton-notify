@@ -1,7 +1,9 @@
 {
   "name": "meet-ton-notify",
-  "version": "1.13.3",
+  "version": "0.0.1",
   "dependencies": {
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.23.9",
     "@orbs-network/ton-access": "^2.3.3",
     "@ton/core": "^0.53.0",
     "@ton/crypto": "^3.2.0",
@@ -12,6 +14,7 @@
     "fs": "^0.0.1-security",
     "mongoose": "^8.1.1",
     "node-schedule": "^2.1.1",
+    "pkg": "^5.8.1",
     "prettier": "^3.1.0",
     "redis": "^4.6.12",
     "tonweb": "^0.0.62",
@@ -23,9 +26,12 @@
   },
   "type": "module",
   "scripts": {
-    "start": "npx nodemon"
+    "start": "npx nodemon",
+    "build:pkg": "tsc --outDir dist && npm run reform && pkg .",
+    "reform": "babel dist --out-dir docs --extensions '.js' --copy-files",
+    "build": "sh run.sh"
   },
-  "main": "src/index.ts",
+  "main": "docs/index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -34,5 +40,15 @@
     "@types/node-schedule": "^2.1.5",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2"
+  },
+  "bin": "docs/index.js",
+  "pkg": {
+    "assets": [
+      "docs/**/*"
+    ],
+    "outputPath": "./docs",
+    "targets": [
+      "node18-linux-x64"
+    ]
   }
 }
