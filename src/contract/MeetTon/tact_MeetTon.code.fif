@@ -42,7 +42,7 @@ PROGRAM{
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $MeetTon$_fun_forward
   DECLPROC $MeetTon$_fun_notify
-  DECLPROC $Payment$_constructor_goal_value_sender_date
+  DECLPROC $Payment$_constructor_for_id_goal_value_sender_date
   DECLPROC $SendParameters$_constructor_to_bounce_value_mode
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $MeetTon$_internal_binary_Income
@@ -168,33 +168,59 @@ PROGRAM{
   $Income$_load PROCINLINE:<{
     32 LDU
     SWAP
-    631667091 PUSHINT
+    589627220 PUSHINT
     EQUAL
     129 THROWIFNOT
     LDREF
     SWAP
     CTOS
+    SWAP
+    32 LDU
+    1 LDI
+    SWAP
+    IF:<{
+      32 LDU
+    }>ELSE<{
+      PUSHNULL
+      SWAP
+    }>
+    3 -ROLL
   }>
-  $Payment$_store PROCINLINE:<{
-    s4 s3 XCHG2
+  $Payment$_store PROCREF:<{
+    s6 s5 XCHG2
     __tact_store_address INLINECALLDICT
     NEWC
-    ROT
+    s0 s4 XCHG2
     STSLICER
     ENDC
-    SWAP
+    s0 s3 XCHG2
     STREF
-    ROT
+    SWAP
     STGRAMS
     32 STU
+    s1 s2 XCHG
+    32 STU
+    OVER
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      SWAP
+      1 STI
+      32 STU
+    }>ELSE<{
+      FALSE
+      s2 POP
+      1 STI
+    }>
   }>
   $Payment$_store_cell PROCINLINE:<{
     NEWC
-    4 -ROLL
+    6 -ROLL
     $Payment$_store INLINECALLDICT
     ENDC
   }>
-  $Payment$_load PROCINLINE:<{
+  $Payment$_load PROCREF:<{
     __tact_load_address INLINECALLDICT
     SWAP
     LDREF
@@ -203,10 +229,19 @@ PROGRAM{
     SWAP
     LDGRAMS
     32 LDU
-    4 -ROLL
+    32 LDU
+    1 LDI
+    SWAP
+    IF:<{
+      32 LDU
+    }>ELSE<{
+      PUSHNULL
+      SWAP
+    }>
+    6 -ROLL
   }>
   $Payment$_as_optional PROCINLINE:<{
-    4 TUPLE
+    6 TUPLE
   }>
   $Payment$_load_opt PROCINLINE:<{
     DUP
@@ -217,17 +252,18 @@ PROGRAM{
     }>ELSE<{
       CTOS
       $Payment$_load INLINECALLDICT
-      1 4 BLKDROP2
+      1 6 BLKDROP2
       $Payment$_as_optional INLINECALLDICT
     }>
   }>
   $Clear$_load PROCINLINE:<{
     32 LDU
     SWAP
-    1708884888 PUSHINT
+    1783047476 PUSHINT
     EQUAL
     129 THROWIFNOT
-    16 LDU
+    257 PUSHINT
+    LDIX
     SWAP
   }>
   $MeetTon$_store PROCINLINE:<{
@@ -235,13 +271,15 @@ PROGRAM{
     __tact_store_address INLINECALLDICT
     s1 s2 XCHG
     STDICT
-    16 STU
+    257 PUSHINT
+    STIX
   }>
   $MeetTon$_load PROCINLINE:<{
     __tact_load_address INLINECALLDICT
     SWAP
     LDDICT
-    16 LDU
+    257 PUSHINT
+    LDIX
     3 -ROLL
   }>
   $StateInit$_not_null PROCINLINE:<{
@@ -258,10 +296,10 @@ PROGRAM{
     DUP
     ISNULL
     128 THROWIF
-    4 UNTUPLE
+    6 UNTUPLE
   }>
   $Payment$_to_tuple PROCINLINE:<{
-    4 TUPLE
+    6 TUPLE
   }>
   $Payment$_to_opt_tuple PROCINLINE:<{
     DUP
@@ -426,7 +464,7 @@ PROGRAM{
     SENDRAWMSG
   }>
   $MeetTon$_fun_onlyOwner PROCREF:<{
-    53979 PUSHINT
+    27921 PUSHINT
     __tact_context_get_sender INLINECALLDICT
     s4 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
@@ -482,8 +520,10 @@ PROGRAM{
     PUSHNULL
     $MeetTon$_fun_forward INLINECALLDICT
   }>
-  $Payment$_constructor_goal_value_sender_date PROCINLINE:<{
-    s3 s3 s0 XCHG3
+  $Payment$_constructor_for_id_goal_value_sender_date PROCINLINE:<{
+    s1 s5 XCHG
+    s3 s4 XCHG
+    s0 s3 s3 XCHG3
   }>
   $SendParameters$_constructor_to_bounce_value_mode PROCINLINE:<{
     s2 s3 XCHG
@@ -497,11 +537,12 @@ PROGRAM{
     __tact_context_get INLINECALLDICT
     $Context$_get_value INLINECALLDICT
     __tact_context_get_sender INLINECALLDICT
+    s2 s4 XCHG
     NOW
-    $Payment$_constructor_goal_value_sender_date INLINECALLDICT
-    3 -ROLL
+    $Payment$_constructor_for_id_goal_value_sender_date INLINECALLDICT
+    5 -ROLL
     257 PUSHINT
-    s0 s4 XCHG
+    s0 s6 XCHG
     $Payment$_store_cell INLINECALLDICT
     s2 PUSH
     s3 s4 XCHG
@@ -598,7 +639,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d57517a424a626139784e743575395a64563255384262613343755771706f5a316a7253567837533232704e38} PUSHSLICE
+    x{697066733a2f2f516d664238534a6f6241537a50707a614d764a383637643338487851466a5774613172726d76726d4834456e6846} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -624,12 +665,12 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    631667091 PUSHINT
+    589627220 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
       $Income$_load INLINECALLDICT
-      NIP
+      1 3 BLKDROP2
       $MeetTon$_internal_binary_Income INLINECALLDICT
       TRUE
     }>
@@ -644,7 +685,7 @@ PROGRAM{
       TRUE
     }>
     DUP
-    1708884888 PUSHINT
+    1783047476 PUSHINT
     EQUAL
     IFJMP:<{
       DROP

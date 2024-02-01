@@ -18,7 +18,7 @@
 
 ((slice, cell, int), ()) $MeetTon$_fun_onlyOwner((slice, cell, int) $self) impure inline_ref {
     var (($self'owner, $self'payments, $self'arrLength)) = $self;
-    throw_unless(53979, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
+    throw_unless(27921, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
     return (($self'owner, $self'payments, $self'arrLength), ());
 }
 
@@ -51,11 +51,11 @@
 ;; Receivers of a Contract MeetTon
 ;;
 
-(((slice, cell, int)), ()) $MeetTon$_internal_binary_Income((slice, cell, int) $self, (slice) $inc) impure inline {
+(((slice, cell, int)), ()) $MeetTon$_internal_binary_Income((slice, cell, int) $self, (slice, int, int) $inc) impure inline {
     var ($self'owner, $self'payments, $self'arrLength) = $self;
-    var ($inc'goal) = $inc;
-    var ($item'sender, $item'goal, $item'value, $item'date) = $Payment$_constructor_goal_value_sender_date($inc'goal, $Context$_get_value(__tact_context_get()), __tact_context_get_sender(), now());
-    $self'payments~__tact_dict_set_int_cell(257, $self'arrLength, $Payment$_store_cell(($item'sender, $item'goal, $item'value, $item'date)));
+    var ($inc'goal, $inc'id, $inc'for) = $inc;
+    var ($item'sender, $item'goal, $item'value, $item'date, $item'id, $item'for) = $Payment$_constructor_for_id_goal_value_sender_date($inc'for, $inc'id, $inc'goal, $Context$_get_value(__tact_context_get()), __tact_context_get_sender(), now());
+    $self'payments~__tact_dict_set_int_cell(257, $self'arrLength, $Payment$_store_cell(($item'sender, $item'goal, $item'value, $item'date, $item'id, $item'for)));
     $self'arrLength = ($self'arrLength + 1);
     return (($self'owner, $self'payments, $self'arrLength), ());
 }
@@ -139,7 +139,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmWQzBJba9xNt5u9ZdV2U8Bba3CuWqpoZ1jrSVx7S22pN8";
+    return "ipfs://QmfB8SJobASzPpzaMvJ867d38HxQFjWta1rrmvrmH4EnhF";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -164,7 +164,7 @@ _ lazy_deployment_completed() method_id {
     
     
     ;; Receive Income message
-    if (op == 631667091) {
+    if (op == 589627220) {
         var msg = in_msg~$Income$_load();
         self~$MeetTon$_internal_binary_Income(msg);
         return (self, true);
@@ -178,7 +178,7 @@ _ lazy_deployment_completed() method_id {
     }
     
     ;; Receive Clear message
-    if (op == 1708884888) {
+    if (op == 1783047476) {
         var msg = in_msg~$Clear$_load();
         self~$MeetTon$_internal_binary_Clear(msg);
         return (self, true);

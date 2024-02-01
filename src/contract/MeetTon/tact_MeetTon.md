@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: MeetTon
-BOC Size: 1220 bytes
+BOC Size: 1293 bytes
 
 # Types
 Total Types: 10
@@ -34,16 +34,16 @@ TLB: `withdraw#0ba69751 amount:coins = Withdraw`
 Signature: `Withdraw{amount:coins}`
 
 ## Income
-TLB: `income#25a67993 goal:^string = Income`
-Signature: `Income{goal:^string}`
+TLB: `income#2324ff54 goal:^string id:uint32 for:Maybe uint32 = Income`
+Signature: `Income{goal:^string,id:uint32,for:Maybe uint32}`
 
 ## Payment
-TLB: `_ sender:address goal:^string value:coins date:uint32 = Payment`
-Signature: `Payment{sender:address,goal:^string,value:coins,date:uint32}`
+TLB: `_ sender:address goal:^string value:coins date:uint32 id:uint32 for:Maybe uint32 = Payment`
+Signature: `Payment{sender:address,goal:^string,value:coins,date:uint32,id:uint32,for:Maybe uint32}`
 
 ## Clear
-TLB: `clear#65db8398 itemNumb:uint16 = Clear`
-Signature: `Clear{itemNumb:uint16}`
+TLB: `clear#6a472534 itemNumb:int257 = Clear`
+Signature: `Clear{itemNumb:int257}`
 
 # Get Methods
 Total Get Methods: 5
@@ -84,6 +84,6 @@ Argument: key
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
+27921: Only owner is allowed to withdraw
 27997: You have more unresolved transactions
-53979: only owner is allowed to withdraw
 54615: Insufficient balance

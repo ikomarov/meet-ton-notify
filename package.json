@@ -8,11 +8,18 @@
     "@ton/ton": "^13.9.0",
     "@types/node": "^20.2.5",
     "buffer": "^6.0.3",
+    "dotenv": "^16.4.1",
+    "fs": "^0.0.1-security",
+    "mongoose": "^8.1.1",
+    "node-schedule": "^2.1.1",
     "prettier": "^3.1.0",
+    "redis": "^4.6.12",
     "tonweb": "^0.0.62",
     "tonweb-boc": "^0.0.4",
     "ts-jest": "^29.0.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "type": "module",
   "scripts": {
@@ -24,6 +31,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/node-schedule": "^2.1.5",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2"
   }

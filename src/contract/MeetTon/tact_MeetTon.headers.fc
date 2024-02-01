@@ -49,19 +49,19 @@ cell $DeployOk$_store_cell((int) v) inline;
 (slice, ((int))) $Withdraw$_load(slice sc_0) inline;
 
 ;; $Income$_load
-(slice, ((slice))) $Income$_load(slice sc_0) inline;
+(slice, ((slice, int, int))) $Income$_load(slice sc_0) inline;
 
 ;; $Payment$_store
-builder $Payment$_store(builder build_0, (slice, slice, int, int) v) inline;
+builder $Payment$_store(builder build_0, (slice, slice, int, int, int, int) v) inline_ref;
 
 ;; $Payment$_store_cell
-cell $Payment$_store_cell((slice, slice, int, int) v) inline;
+cell $Payment$_store_cell((slice, slice, int, int, int, int) v) inline;
 
 ;; $Payment$_load
-(slice, ((slice, slice, int, int))) $Payment$_load(slice sc_0) inline;
+(slice, ((slice, slice, int, int, int, int))) $Payment$_load(slice sc_0) inline_ref;
 
 ;; $Payment$_as_optional
-tuple $Payment$_as_optional((slice, slice, int, int) v) inline;
+tuple $Payment$_as_optional((slice, slice, int, int, int, int) v) inline;
 
 ;; $Payment$_load_opt
 tuple $Payment$_load_opt(cell cl) inline;
@@ -82,10 +82,10 @@ builder $MeetTon$_store(builder build_0, (slice, cell, int) v) inline;
 _ $Context$_get_value((int, slice, int, slice) v) inline;
 
 ;; $Payment$_not_null
-((slice, slice, int, int)) $Payment$_not_null(tuple v) inline;
+((slice, slice, int, int, int, int)) $Payment$_not_null(tuple v) inline;
 
 ;; $Payment$_to_tuple
-tuple $Payment$_to_tuple(((slice, slice, int, int)) v) inline;
+tuple $Payment$_to_tuple(((slice, slice, int, int, int, int)) v) inline;
 
 ;; $Payment$_to_opt_tuple
 tuple $Payment$_to_opt_tuple(tuple v) inline;
@@ -132,8 +132,8 @@ tuple $Payment$_to_opt_external(tuple v) inline;
 ;; $MeetTon$_fun_notify
 ((slice, cell, int), ()) $MeetTon$_fun_notify((slice, cell, int) $self, cell $body) impure inline;
 
-;; $Payment$_constructor_goal_value_sender_date
-((slice, slice, int, int)) $Payment$_constructor_goal_value_sender_date(slice goal, int value, slice sender, int date) inline;
+;; $Payment$_constructor_for_id_goal_value_sender_date
+((slice, slice, int, int, int, int)) $Payment$_constructor_for_id_goal_value_sender_date(int for, int id, slice goal, int value, slice sender, int date) inline;
 
 ;; $SendParameters$_constructor_to_bounce_value_mode
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_bounce_value_mode(slice to, int bounce, int value, int mode) inline;

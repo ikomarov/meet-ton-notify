@@ -79,45 +79,51 @@ cell $DeployOk$_store_cell((int) v) inline {
 
 ;;
 ;; Type: Income
-;; Header: 0x25a67993
-;; TLB: income#25a67993 goal:^string = Income
+;; Header: 0x2324ff54
+;; TLB: income#2324ff54 goal:^string id:uint32 for:Maybe uint32 = Income
 ;;
 
-(slice, ((slice))) $Income$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 631667091);
+(slice, ((slice, int, int))) $Income$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 589627220);
     var v'goal = sc_0~load_ref().begin_parse();
-    return (sc_0, (v'goal));
+    var v'id = sc_0~load_uint(32);
+    var v'for = sc_0~load_int(1) ? sc_0~load_uint(32) : null();
+    return (sc_0, (v'goal, v'id, v'for));
 }
 
 ;;
 ;; Type: Payment
-;; TLB: _ sender:address goal:^string value:coins date:uint32 = Payment
+;; TLB: _ sender:address goal:^string value:coins date:uint32 id:uint32 for:Maybe uint32 = Payment
 ;;
 
-builder $Payment$_store(builder build_0, (slice, slice, int, int) v) inline {
-    var (v'sender, v'goal, v'value, v'date) = v;
+builder $Payment$_store(builder build_0, (slice, slice, int, int, int, int) v) inline_ref {
+    var (v'sender, v'goal, v'value, v'date, v'id, v'for) = v;
     build_0 = __tact_store_address(build_0, v'sender);
     build_0 = build_0.store_ref(begin_cell().store_slice(v'goal).end_cell());
     build_0 = build_0.store_coins(v'value);
     build_0 = build_0.store_uint(v'date, 32);
+    build_0 = build_0.store_uint(v'id, 32);
+    build_0 = ~ null?(v'for) ? build_0.store_int(true, 1).store_uint(v'for, 32) : build_0.store_int(false, 1);
     return build_0;
 }
 
-cell $Payment$_store_cell((slice, slice, int, int) v) inline {
+cell $Payment$_store_cell((slice, slice, int, int, int, int) v) inline {
     return $Payment$_store(begin_cell(), v).end_cell();
 }
 
-(slice, ((slice, slice, int, int))) $Payment$_load(slice sc_0) inline {
+(slice, ((slice, slice, int, int, int, int))) $Payment$_load(slice sc_0) inline_ref {
     var v'sender = sc_0~__tact_load_address();
     var v'goal = sc_0~load_ref().begin_parse();
     var v'value = sc_0~load_coins();
     var v'date = sc_0~load_uint(32);
-    return (sc_0, (v'sender, v'goal, v'value, v'date));
+    var v'id = sc_0~load_uint(32);
+    var v'for = sc_0~load_int(1) ? sc_0~load_uint(32) : null();
+    return (sc_0, (v'sender, v'goal, v'value, v'date, v'id, v'for));
 }
 
-tuple $Payment$_as_optional((slice, slice, int, int) v) inline {
-    var (v'sender, v'goal, v'value, v'date) = v;
-    return __tact_tuple_create_4(v'sender, v'goal, v'value, v'date);
+tuple $Payment$_as_optional((slice, slice, int, int, int, int) v) inline {
+    var (v'sender, v'goal, v'value, v'date, v'id, v'for) = v;
+    return __tact_tuple_create_6(v'sender, v'goal, v'value, v'date, v'id, v'for);
 }
 
 tuple $Payment$_load_opt(cell cl) inline {
@@ -128,15 +134,15 @@ tuple $Payment$_load_opt(cell cl) inline {
     return $Payment$_as_optional(sc~$Payment$_load());
 }
 
-((slice, slice, int, int)) $Payment$_not_null(tuple v) inline {
+((slice, slice, int, int, int, int)) $Payment$_not_null(tuple v) inline {
     throw_if(128, null?(v));
-    var (slice vvv'sender, slice vvv'goal, int vvv'value, int vvv'date) = __tact_tuple_destroy_4(v);
-    return (vvv'sender, vvv'goal, vvv'value, vvv'date);
+    var (slice vvv'sender, slice vvv'goal, int vvv'value, int vvv'date, int vvv'id, int vvv'for) = __tact_tuple_destroy_6(v);
+    return (vvv'sender, vvv'goal, vvv'value, vvv'date, vvv'id, vvv'for);
 }
 
-tuple $Payment$_to_tuple(((slice, slice, int, int)) v) inline {
-    var (v'sender, v'goal, v'value, v'date) = v;
-    return __tact_tuple_create_4(v'sender, v'goal, v'value, v'date);
+tuple $Payment$_to_tuple(((slice, slice, int, int, int, int)) v) inline {
+    var (v'sender, v'goal, v'value, v'date, v'id, v'for) = v;
+    return __tact_tuple_create_6(v'sender, v'goal, v'value, v'date, v'id, v'for);
 }
 
 tuple $Payment$_to_opt_tuple(tuple v) inline {
@@ -153,19 +159,19 @@ tuple $Payment$_to_opt_external(tuple v) inline {
     }
 }
 
-((slice, slice, int, int)) $Payment$_constructor_goal_value_sender_date(slice goal, int value, slice sender, int date) inline {
-    return (sender, goal, value, date);
+((slice, slice, int, int, int, int)) $Payment$_constructor_for_id_goal_value_sender_date(int for, int id, slice goal, int value, slice sender, int date) inline {
+    return (sender, goal, value, date, id, for);
 }
 
 ;;
 ;; Type: Clear
-;; Header: 0x65db8398
-;; TLB: clear#65db8398 itemNumb:uint16 = Clear
+;; Header: 0x6a472534
+;; TLB: clear#6a472534 itemNumb:int257 = Clear
 ;;
 
 (slice, ((int))) $Clear$_load(slice sc_0) inline {
-    throw_unless(129, sc_0~load_uint(32) == 1708884888);
-    var v'itemNumb = sc_0~load_uint(16);
+    throw_unless(129, sc_0~load_uint(32) == 1783047476);
+    var v'itemNumb = sc_0~load_int(257);
     return (sc_0, (v'itemNumb));
 }
 
@@ -177,14 +183,14 @@ builder $MeetTon$_store(builder build_0, (slice, cell, int) v) inline {
     var (v'owner, v'payments, v'arrLength) = v;
     build_0 = __tact_store_address(build_0, v'owner);
     build_0 = build_0.store_dict(v'payments);
-    build_0 = build_0.store_uint(v'arrLength, 16);
+    build_0 = build_0.store_int(v'arrLength, 257);
     return build_0;
 }
 
 (slice, ((slice, cell, int))) $MeetTon$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
     var v'payments = sc_0~load_dict();
-    var v'arrLength = sc_0~load_uint(16);
+    var v'arrLength = sc_0~load_int(257);
     return (sc_0, (v'owner, v'payments, v'arrLength));
 }
 
