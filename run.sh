@@ -12,6 +12,7 @@ docker rm $CONTAINER_NAME
 
 # Очистка рабочего каталога
 rm -rf dist
+rm -rf docs
 
 # Создание Docker-образа с версией
 echo "Сборка Docker-образа $APP_NAME:$PACKAGE_VERSION..."
@@ -32,8 +33,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-mkdir -p ./dist
-docker cp $CONTAINER_NAME:/app/dist/$APP_NAME ./dist/$APP_NAME_WITH_VERSION
+mkdir -p ./docs
+docker cp $CONTAINER_NAME:/app/docs/$APP_NAME ./docs/$APP_NAME_WITH_VERSION
 
 if [ $? -ne 0 ]; then
     echo "Ошибка при копировании исполняемого файла"
