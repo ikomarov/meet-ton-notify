@@ -21,7 +21,7 @@ export async function resolvePayments(pay: Payment) {
     if (!handle) return
 
     const [existingPayment, typeCost] = await Promise.all([
-      models.Payments.findOne({paymentId}), //todo положить платежи в redis
+      models.Payments.findOne({paymentId}),
       getConfiguration(configuration?.code as string),
     ])
 
