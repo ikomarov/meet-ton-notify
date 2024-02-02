@@ -4,6 +4,8 @@ import {PAYMENT_HANDLE} from './payments-handle.js'
 import {Payment} from "../contract/MeetTon/tact_MeetTon.js";
 import {getDateFromContract} from "../utils/get-date-from-contract.js";
 import {fromNano} from "@ton/ton";
+import {getConfiguration} from "../services/redis/get-сonfiguration.js";
+import {configurations} from "../consts/core-config.js";
 
 export async function resolvePayments(pay: Payment) {
   try {
@@ -11,9 +13,17 @@ export async function resolvePayments(pay: Payment) {
     const paymentId = `${String(pay.id)}${pay.goal}:${date.toString()}`
     const user_id = Number(pay.id)
     const type = pay.goal
+    const configuration = configurations.find((elem) => elem.productId === type)
 
-    // Проверяем, был ли платеж уже обработан
-    const existingPayment = await models.Payments.findOne({paymentId})
+    // @ts-ignore
+    const handle = PAYMENT_HANDLE[type]
+
+    if (!handle) return
+
+    const [existingPayment, typeCost] = await Promise.all([
+      models.Payments.findOne({paymentId}), //todo положить платежи в redis
+      getConfiguration(configuration?.code as string),
+    ])
 
     if (existingPayment) {
       // Если платеж уже существует
@@ -32,10 +42,7 @@ export async function resolvePayments(pay: Payment) {
       type
     }
 
-    // @ts-ignore
-    const handle = PAYMENT_HANDLE[type]
-
-    if (!handle) return
+    if (typeCost && Number(typeCost) !== Number(fromNano(pay.value))) return
 
     console.log("New payment" + date.toString())
 

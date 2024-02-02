@@ -2,26 +2,34 @@ import {TonClient} from "@ton/ton";
 import {Address} from "@ton/core";
 import {getHttpEndpoint, Network} from "@orbs-network/ton-access";
 import {MeetTon, Payment} from "../contract/MeetTon/tact_MeetTon.js";
-import {CONTRACT_URL, NETWORK} from "../consts/env.js";
+import {CONTRACT_KEY, NETWORK} from "../consts/env.js";
 import {recurringFunction} from "../utils/recurring-function.js";
 import {resolvePayments} from "./resolve-payments.js";
+import {getLengthBig} from "../services/redis/get-length-big.js";
+import {saveLengthBig} from "../services/redis/save-length-big.js";
+import {logError} from "../utils/logger.js";
 
 async function checkPayments() {
     try {
-        const contractAddress = Address.parse(CONTRACT_URL as string);
+        const contractAddress = Address.parse(CONTRACT_KEY as string);
 
         const client = new TonClient({
             endpoint: await getHttpEndpoint({network: NETWORK as Network})
         });
 
         const MeetTonContract = client.open(MeetTon.fromAddress(contractAddress))
+        const [storedLength, lengthBig] = await Promise.all([
+            getLengthBig(),
+            MeetTonContract.getLength()
+        ])
 
-        const lengthBig = await MeetTonContract.getLength();
         const length = Number(lengthBig)
 
-        if (length === 0) {
+        if (length === 0 || storedLength === lengthBig) {
             return;
         }
+
+        await saveLengthBig(lengthBig)
 
         const payments = await MeetTonContract.getPayments();
 
@@ -32,12 +40,9 @@ async function checkPayments() {
             await resolvePayments(item)
         }
 
-        // const balance = await MeetTonContract.getBalance();
-        // console.log(`Баланс: ${fromNano(balance)} TON`);
     } catch (error) {
-        console.error("Ошибка:", error);
+        logError('Ошибка checkPayments', error as Error)
     }
-
 }
 
 recurringFunction(checkPayments)
