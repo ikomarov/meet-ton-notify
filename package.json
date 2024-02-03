@@ -4,6 +4,8 @@
   "dependencies": {
     "@babel/cli": "^7.23.9",
     "@babel/core": "^7.23.9",
+    "@babel/plugin-transform-runtime": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
     "@orbs-network/ton-access": "^2.3.3",
     "@ton/core": "^0.53.0",
     "@ton/crypto": "^3.2.0",
