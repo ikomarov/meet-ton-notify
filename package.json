@@ -1,6 +1,6 @@
 {
   "name": "meet-notify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "dependencies": {
     "@babel/cli": "^7.23.9",
     "@babel/core": "^7.23.9",
