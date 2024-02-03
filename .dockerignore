@@ -1,0 +1,13 @@
+.git
+.gitignore
+Dockerfile
+.dockerignore
+readme.md
+package-lock.json
+node_modules
+logs
+dist
+.husky
+.idea
+.editorconfig
+.eslintrc.json

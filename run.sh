@@ -5,11 +5,6 @@ CONTAINER_NAME="${APP_NAME}_container"
 PACKAGE_VERSION=$(node -p "require('./package.json').version")
 APP_NAME_WITH_VERSION="notify-${PACKAGE_VERSION}"
 
-# Остановка и удаление контейнера
-echo "Остановка и удаление контейнера $CONTAINER_NAME..."
-docker stop $CONTAINER_NAME
-docker rm $CONTAINER_NAME
-
 # Очистка рабочего каталога
 rm -rf dist
 rm -rf docs
