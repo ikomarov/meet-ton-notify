@@ -111,8 +111,8 @@ forall X0, X1, X2, X3, X4, X5 -> (X0, X1, X2, X3, X4, X5) __tact_tuple_destroy_6
     send_raw_message($c, $params'mode);
 }
 
-((slice, cell, int), ()) $MeetTon$_fun_forward((slice, cell, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
-    var (($self'owner, $self'payments, $self'arrLength)) = $self;
+((slice, int, cell, int), ()) $MeetTon$_fun_forward((slice, int, cell, int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
+    var (($self'owner, $self'stopped, $self'payments, $self'arrLength)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -128,15 +128,21 @@ forall X0, X1, X2, X3, X4, X5 -> (X0, X1, X2, X3, X4, X5) __tact_tuple_destroy_6
         if (($balanceBeforeMessage < 0)) {
             raw_reserve(0, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'owner, $self'payments, $self'arrLength), ());
+            return (($self'owner, $self'stopped, $self'payments, $self'arrLength), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'owner, $self'payments, $self'arrLength), ());
+    return (($self'owner, $self'stopped, $self'payments, $self'arrLength), ());
 }
 
-((slice, cell, int), ()) $MeetTon$_fun_notify((slice, cell, int) $self, cell $body) impure inline {
-    var (($self'owner, $self'payments, $self'arrLength)) = $self;
-    ($self'owner, $self'payments, $self'arrLength)~$MeetTon$_fun_forward(__tact_context_get_sender(), $body, false, null());
-    return (($self'owner, $self'payments, $self'arrLength), ());
+((slice, int, cell, int), ()) $MeetTon$_fun_reply((slice, int, cell, int) $self, cell $body) impure inline {
+    var (($self'owner, $self'stopped, $self'payments, $self'arrLength)) = $self;
+    ($self'owner, $self'stopped, $self'payments, $self'arrLength)~$MeetTon$_fun_forward(__tact_context_get_sender(), $body, true, null());
+    return (($self'owner, $self'stopped, $self'payments, $self'arrLength), ());
+}
+
+((slice, int, cell, int), ()) $MeetTon$_fun_notify((slice, int, cell, int) $self, cell $body) impure inline {
+    var (($self'owner, $self'stopped, $self'payments, $self'arrLength)) = $self;
+    ($self'owner, $self'stopped, $self'payments, $self'arrLength)~$MeetTon$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return (($self'owner, $self'stopped, $self'payments, $self'arrLength), ());
 }

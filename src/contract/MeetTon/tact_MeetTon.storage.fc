@@ -66,6 +66,41 @@ cell $DeployOk$_store_cell((int) v) inline {
 }
 
 ;;
+;; Type: ChangeOwner
+;; Header: 0x819dbe99
+;; TLB: change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner
+;;
+
+(slice, ((int, slice))) $ChangeOwner$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2174598809);
+    var v'queryId = sc_0~load_uint(64);
+    var v'newOwner = sc_0~__tact_load_address();
+    return (sc_0, (v'queryId, v'newOwner));
+}
+
+;;
+;; Type: ChangeOwnerOk
+;; Header: 0x327b2b4a
+;; TLB: change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk
+;;
+
+builder $ChangeOwnerOk$_store(builder build_0, (int, slice) v) inline {
+    var (v'queryId, v'newOwner) = v;
+    build_0 = store_uint(build_0, 846932810, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    build_0 = __tact_store_address(build_0, v'newOwner);
+    return build_0;
+}
+
+cell $ChangeOwnerOk$_store_cell((int, slice) v) inline {
+    return $ChangeOwnerOk$_store(begin_cell(), v).end_cell();
+}
+
+((int, slice)) $ChangeOwnerOk$_constructor_queryId_newOwner(int queryId, slice newOwner) inline {
+    return (queryId, newOwner);
+}
+
+;;
 ;; Type: Withdraw
 ;; Header: 0x0ba69751
 ;; TLB: withdraw#0ba69751 amount:coins = Withdraw
@@ -179,22 +214,24 @@ tuple $Payment$_to_opt_external(tuple v) inline {
 ;; Type: MeetTon
 ;;
 
-builder $MeetTon$_store(builder build_0, (slice, cell, int) v) inline {
-    var (v'owner, v'payments, v'arrLength) = v;
+builder $MeetTon$_store(builder build_0, (slice, int, cell, int) v) inline {
+    var (v'owner, v'stopped, v'payments, v'arrLength) = v;
     build_0 = __tact_store_address(build_0, v'owner);
+    build_0 = build_0.store_int(v'stopped, 1);
     build_0 = build_0.store_dict(v'payments);
     build_0 = build_0.store_int(v'arrLength, 257);
     return build_0;
 }
 
-(slice, ((slice, cell, int))) $MeetTon$_load(slice sc_0) inline {
+(slice, ((slice, int, cell, int))) $MeetTon$_load(slice sc_0) inline {
     var v'owner = sc_0~__tact_load_address();
+    var v'stopped = sc_0~load_int(1);
     var v'payments = sc_0~load_dict();
     var v'arrLength = sc_0~load_int(257);
-    return (sc_0, (v'owner, v'payments, v'arrLength));
+    return (sc_0, (v'owner, v'stopped, v'payments, v'arrLength));
 }
 
-(slice, cell, int) $MeetTon$_contract_load() impure inline_ref {
+(slice, int, cell, int) $MeetTon$_contract_load() impure inline_ref {
     slice $sc = get_data().begin_parse();
     __tact_context_sys = $sc~load_ref();
     int $loaded = $sc~load_int(1);
@@ -207,7 +244,7 @@ builder $MeetTon$_store(builder build_0, (slice, cell, int) v) inline {
     }
 }
 
-() $MeetTon$_contract_store((slice, cell, int) v) impure inline {
+() $MeetTon$_contract_store((slice, int, cell, int) v) impure inline {
     builder b = begin_cell();
     b = b.store_ref(__tact_context_sys);
     b = b.store_int(true, 1);

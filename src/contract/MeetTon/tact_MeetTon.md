@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: MeetTon
-BOC Size: 1293 bytes
+BOC Size: 1787 bytes
 
 # Types
-Total Types: 10
+Total Types: 12
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -29,6 +29,14 @@ Signature: `DeployOk{queryId:uint64}`
 TLB: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
 Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
 
+## ChangeOwner
+TLB: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
+
+## ChangeOwnerOk
+TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
+Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
+
 ## Withdraw
 TLB: `withdraw#0ba69751 amount:coins = Withdraw`
 Signature: `Withdraw{amount:coins}`
@@ -46,7 +54,7 @@ TLB: `clear#6a472534 itemNumb:int257 = Clear`
 Signature: `Clear{itemNumb:int257}`
 
 # Get Methods
-Total Get Methods: 5
+Total Get Methods: 7
 
 ## balance
 
@@ -58,6 +66,10 @@ Argument: key
 ## payments
 
 ## length
+
+## owner
+
+## stopped
 
 # Error Codes
 2: Stack undeflow
@@ -84,6 +96,7 @@ Argument: key
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
-27921: Only owner is allowed to withdraw
 27997: You have more unresolved transactions
+40368: Contract stopped
+53296: Contract not stopped
 54615: Insufficient balance
