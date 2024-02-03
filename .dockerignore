@@ -11,3 +11,4 @@ dist
 .idea
 .editorconfig
 .eslintrc.json
+yarn.lock
