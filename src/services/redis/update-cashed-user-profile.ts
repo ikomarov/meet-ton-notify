@@ -20,7 +20,7 @@ export async function updateCachedUserProfile(userId: number, updates: any) {
 
       // Обновляем профиль в Redis с TTL 1 час (3600 секунд)
       // @ts-ignore
-      await clientRedis.set(redisKey, serializedProfile, 'EX', 3600)
+      await clientRedis.set(redisKey, serializedProfile, {'EX': 3600})
     }
   } catch (err) {
     logError('Ошибка в updateCachedUserProfile', err as Error)

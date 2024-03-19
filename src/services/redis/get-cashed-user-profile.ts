@@ -21,7 +21,7 @@ export async function getCachedUserProfile(userId: number) {
       if (userProfile) {
         // Сохраняем профиль в Redis с TTL 1 час (3600 секунд)
         // @ts-ignore
-        await clientRedis.set(redisKey, JSON.stringify(userProfile), 'EX', 3600)
+        await clientRedis.set(redisKey, JSON.stringify(userProfile), {'EX': 3600})
 
         return userProfile
       }
