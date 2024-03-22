@@ -1,5 +1,5 @@
 import models from '../models/index.js'
-import {logError} from '../utils/logger.js'
+import {logError, logInfo} from '../utils/logger.js'
 import {PAYMENT_HANDLE} from './payments-handle.js'
 import {Payment} from "../contract/MeetTon/tact_MeetTon.js";
 import {getDateFromContract} from "../utils/get-date-from-contract.js";
@@ -44,7 +44,7 @@ export async function resolvePayments(pay: Payment) {
 
     if (typeCost && Number(typeCost) !== Number(fromNano(pay.value))) return
 
-    console.log("New payment" + date.toString())
+    logInfo("New payment")
 
     await Promise.all([
       handle({user_id, userFor: Number(pay.for)}),
