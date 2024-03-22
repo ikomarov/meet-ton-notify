@@ -20,14 +20,14 @@ const logger = createLogger({
   ),
   transports: [
     new DailyRotateFile({
-      filename: 'logs/app-error-%DATE%.log',
+      filename: 'logs/ton-error-%DATE%.log',
       level: 'error',
       datePattern: 'YYYY-MM-DD',
       zippedArchive: false,
       maxSize: '20m',
       maxFiles: '14d',
     }),
-    new transports.File({ filename: 'logs/app-combined.log' }),
+    new transports.File({ filename: 'logs/ton-combined.log' }),
     new transports.Console({ format: format.simple() }),
   ],
 });
