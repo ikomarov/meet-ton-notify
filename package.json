@@ -46,6 +46,7 @@
   "bin": "docs/index.js",
   "pkg": {
     "assets": [
+      "node_modules/axios/dist/**/*",
       "docs/**/*"
     ],
     "outputPath": "./docs",
