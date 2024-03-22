@@ -116,7 +116,8 @@ const ProfilesSchema = new Schema({
   },
   referral_id: {
     type: String,
-    default: ''
+    default: '',
+    index: true
   },
   bot_inactive: {
     type: Boolean,
@@ -129,6 +130,24 @@ const ProfilesSchema = new Schema({
     index: true
   },
   best_profile: { // нужен для попадания в топ поиска
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  language_code: {
+    type: String,
+    default: ''
+  },
+  count_user_invite: {
+    type: Number,
+    default: 0
+  },
+  invite_id: {
+    type: String,
+    default: '',
+    index: true
+  },
+  username_active: {
     type: Boolean,
     default: false,
     index: true
